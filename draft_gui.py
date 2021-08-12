@@ -71,6 +71,9 @@ class App(Frame):
         Button(self, text='Sales Básicas', width=20, height=2, command=lambda m=['SB', 8, 20]: self.reaccion(m)).grid(row=8, column=20)
         Button(self, text='Sales Mixtas', width=20, height=2, command=lambda m=['SM', 9, 20]: self.reaccion(m)).grid(row=9, column=20)
 
+        self.resultLine = Label(self, text="", justify='left')
+        self.resultLine.grid(row=10, column=20, columnspan=6)
+
         self.v1 = StringVar()  # a string variable to hold user selection
         self.v2 = StringVar()  # a string variable to hold user selection
         self.v3 = StringVar()  # a string variable to hold user selection
@@ -200,12 +203,15 @@ class App(Frame):
 
     def llenar_valencias(self, event):
         if self.combobox1 is event.widget:
+            self.v1v.set('')
             self.combobox1v['values'] = self.get_elementos_valencia(self.v1.get())
             self.combobox1v.grid(row=self.posicion_boton[0], column=self.posicion_boton[1] + 2)
         elif self.combobox2 is event.widget:
+            self.v2v.set('')
             self.combobox2v['values'] = self.get_elementos_valencia(self.v2.get())
             self.combobox2v.grid(row=self.posicion_boton[0], column=self.posicion_boton[1] + 4)
         elif self.combobox3 is event.widget:
+            self.v3v.set('')
             self.combobox3v['values'] = self.get_elementos_valencia(self.v3.get())
             self.combobox3v.grid(row=self.posicion_boton[0], column=self.posicion_boton[1] + 6)
 
@@ -223,6 +229,12 @@ class App(Frame):
         return self.elementos[elemento].valencia
 
     def comb_reacciones(self):
+        self.resultLine.config(text='')
+        resultado = ''
+
+        # Varible self.v[1,2,3] = tiene el nombre del elemento
+        # Varible self.v[1,2,3]v = tiene el valor de la valencia
+
         if self.nombre_reaccion == 'OM' and self.errores(0):
             print(self.v1.get(), int(self.v1v.get()))
             print(self.v2.get(), int(self.v2v.get()))
@@ -245,6 +257,8 @@ class App(Frame):
             print(self.v3.get(), int(self.v3v.get()))
         else:
             self.reset()
+
+        self.resultLine.config(text=resultado)  # Resultado
 
     def random(self):
         reacciones = ['OM', 'ONM', 'HM', 'HNM', 'H', 'O']
@@ -325,6 +339,8 @@ class App(Frame):
 
         self.topLabel.config(text="Presione el elemento para ver su información")
         self.infoLine.config(text='')
+
+        self.resultLine.config(text='')
 
     def errores(self, tipo):
         condicion = True
